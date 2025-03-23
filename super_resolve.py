@@ -18,6 +18,8 @@ PATCH_SIZE = 256
 
 
 def process_single(source, apply_encoder, apply_decoder, params, target_shape):
+    if source.shape[-1] == 4:  # Check for RGBA
+        source = source[..., :3]
     t = jnp.float32((target_shape[0] / source.shape[1])**-2)[None]
     coords_nearest = jnp.asarray(make_grid(target_shape)[None])
     source_up = interpolate_grid(coords_nearest, source[None])
